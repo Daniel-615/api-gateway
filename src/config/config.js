@@ -1,0 +1,13 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const { 
+  NODE_ENV,FRONTEND_URL,USUARIO_SERVICE,APP_PORT,SECRET_JWT_KEY
+}= process.env;
+
+module.exports = {
+  USUARIO_SERVICE,
+  APP_PORT,
+  NODE_ENV,
+  FRONTEND_URL,
+  SECRET_JWT_KEY
+};
