@@ -2,6 +2,7 @@ const express = require("express");
 const axios=require("axios");
 const {USUARIO_SERVICE,NODE_ENV}= require("../config/config.js");
 const verifyToken=require('../middleware/auth.js')
+const {checkPermisosDesdeRoles}= require('../middleware/checkRole.js')
 class UsuarioRoutes {
   constructor(app) {
     this.router = express.Router();
@@ -118,7 +119,24 @@ class UsuarioRoutes {
       const redirectURL = `${USUARIO_SERVICE}/auth-service/usuario/auth/google`;
       res.redirect(redirectURL); // Redirige directamente al auth-service
     });
-
+    this.router.post("/register-admin/",verifyToken,checkPermisosDesdeRoles(["asignar_roles"]),async(req,res)=>{
+      try{
+        const response=await axios.post(
+          `${USUARIO_SERVICE}/auth-service/usuario/register-admin`, 
+          req.body,
+          {
+            withCredentials: true, // Permitir el envío de cookies
+            headers: {
+              'Cookie': req.headers.cookie // Enviar las cookies del cliente
+            }
+          }
+        )
+        return res.status(response.status).send(response.data);
+      }catch(err){
+        console.error("Error al registrar administrador:", err.message);
+        return res.status(500).send({ message: "Error al comunicarse con auth-service" });
+      }
+    })
   }
 }
 module.exports = UsuarioRoutes;
