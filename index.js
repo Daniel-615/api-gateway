@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const { APP_PORT,FRONTEND_URL}= require('./src/config/config.js');
 const cookieParser = require('cookie-parser');
 const UsuarioService= require('./src/routes/usuario.route.js')
+const UsuarioRolService=require('./src/routes/usuario.rol.route.js')
+const rolService=require('./src/routes/rol.route.js')
+const rolPermisoService=require('./src/routes/rol.permiso.route.js')
+const permisoService=require('./src/routes/permiso.route.js')
 class Server {
   constructor() {
     this.app = express();
@@ -25,6 +29,10 @@ class Server {
 
   configureRoutes() {
     new UsuarioService(this.app);
+    new rolPermisoService(this.app);
+    new rolService(this.app);
+    new permisoService(this.app);
+    new UsuarioRolService(this.app);
   }
 
   start() {
