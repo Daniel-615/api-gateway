@@ -28,8 +28,11 @@ class UsuarioRoutes {
         }
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al iniciar sesión:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        if (err.response) {
+          // El backend respondió con un error (400, 404, etc.)
+          const errorMessage = err.response.data?.message || "Error desconocido al registrar usuario.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
       }
     });
 
@@ -44,9 +47,18 @@ class UsuarioRoutes {
         res.status(response.status).send(response.data);
       } catch (err) {
         console.error("Error al registrar usuario:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        
+        if (err.response) {
+          // El backend respondió con un error (400, 404, etc.)
+          const errorMessage = err.response.data?.message || "Error desconocido al registrar usuario.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
+
+        // Error de red u otra cosa
+        return res.status(500).send({ success: false, error: "Error de conexión con auth-service." });
       }
     });
+
 
     // REGISTRO DE ADMIN
     this.router.post("/register-admin", verifyToken, checkPermisosDesdeRoles(["asignar_roles"]), async (req, res) => {
@@ -62,7 +74,7 @@ class UsuarioRoutes {
         res.status(response.status).send(response.data);
       } catch (err) {
         console.error("Error al registrar administrador:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        res.status(response.status).send(response.data);
       }
     });
 
