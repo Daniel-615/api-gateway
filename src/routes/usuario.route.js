@@ -29,7 +29,6 @@ class UsuarioRoutes {
         res.status(response.status).send(response.data);
       } catch (err) {
         if (err.response) {
-          // El backend respondió con un error (400, 404, etc.)
           const errorMessage = err.response.data?.message || "Error desconocido al registrar usuario.";
           return res.status(err.response.status).send({ success: false, error: errorMessage });
         }
@@ -49,12 +48,9 @@ class UsuarioRoutes {
         console.error("Error al registrar usuario:", err.message);
         
         if (err.response) {
-          // El backend respondió con un error (400, 404, etc.)
           const errorMessage = err.response.data?.message || "Error desconocido al registrar usuario.";
           return res.status(err.response.status).send({ success: false, error: errorMessage });
         }
-
-        // Error de red u otra cosa
         return res.status(500).send({ success: false, error: "Error de conexión con auth-service." });
       }
     });
@@ -73,8 +69,11 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al registrar administrador:", err.message);
-        res.status(response.status).send(response.data);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
+        res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
 
@@ -91,7 +90,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al cerrar sesión:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -109,7 +111,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al refrescar el token:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -127,7 +132,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al enviar el correo de recuperación:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -146,7 +154,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al restablecer la contraseña:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -164,7 +175,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al actualizar usuario:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -182,7 +196,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al desactivar cuenta:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -199,7 +216,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener usuario:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -216,7 +236,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener usuarios:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -233,7 +256,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener usuarios activos:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -250,7 +276,10 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al eliminar usuario:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
@@ -272,19 +301,34 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error en callback de Google:", err.message);
+        if(err.response){
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
 
     // VERIFICACIÓN DE TOKEN
-    this.router.get("/", verifyToken, (req, res) => {
-      res.status(200).send({
-        message: "Token verificado correctamente.",
-        userId: req.user.id,
-        email: req.user.email,
-        rol: req.user.rol
-      });
+    this.router.get("/", async (req, res) => {
+      try {
+        const response = await axios.get(
+          `${USUARIO_SERVICE}/auth-service/usuario/verifyToken`, 
+          {
+            withCredentials: true,
+            headers: { Cookie: req.headers.cookie }
+          }
+        );
+        res.status(response.status).send(response.data);
+      } catch (err) {
+        if(err.response){
+          
+          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
+          
+          return res.status(err.response.status).send({ success: false, error: errorMessage });
+        }
+        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+      }
     });
   }
 }
