@@ -290,24 +290,6 @@ class UsuarioRoutes {
       res.redirect(redirectURL);
     });
 
-    this.router.get("/auth/google/callback", async (req, res) => {
-      try {
-        const response = await axios.get(
-          `${USUARIO_SERVICE}/auth-service/usuario/auth/google/callback`,
-          {
-            withCredentials: true,
-            headers: { 'Cookie': req.headers.cookie }
-          }
-        );
-        res.status(response.status).send(response.data);
-      } catch (err) {
-        if(err.response){
-          const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
-          return res.status(err.response.status).send({ success: false, error: errorMessage });
-        }
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
-      }
-    });
 
     // VERIFICACIÓN DE TOKEN
     this.router.get("/", async (req, res) => {
