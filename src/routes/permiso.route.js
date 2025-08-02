@@ -33,8 +33,13 @@ class PermisoRoutes {
     // Obtener todos los permisos
     this.router.get("/", verifyToken, checkPermisosDesdeRoles(["ver_permisos"]), async (req, res) => {
       try {
+        const {page,limit}= req.query;
+        const queryParams=new URLSearchParams();
+        if(page) queryParams.append("page",page);
+        if(limit) queryParams.append("limit",limit);
+
         const response = await axios.get(
-          `${USUARIO_SERVICE}/auth-service/permiso`,
+          `${USUARIO_SERVICE}/auth-service/permiso?${queryParams.toString()}`,
           {
             withCredentials: true,
             headers: { Cookie: req.headers.cookie }
