@@ -29,13 +29,13 @@ class RolPermisoRoutes {
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
-
-    // Crear múltiples relaciones rol-permiso
-    this.router.post("/many", verifyToken, checkPermisosDesdeRoles(["asignar_permisos", "asignar_roles"]), async (req, res) => {
+    
+    // Obtener relaciones rol-permiso con paginación
+    this.router.get("/", verifyToken, checkPermisosDesdeRoles(["ver_roles", "ver_permisos"]), async (req, res) => {
+      const { page = 1, limit = 10 } = req.query;
       try {
-        const response = await axios.post(
-          `${USUARIO_SERVICE}/auth-service/rol-permiso/many`,
-          req.body,
+        const response = await axios.get(
+          `${USUARIO_SERVICE}/auth-service/rol-permiso/?page=${page}&limit=${limit}`,
           {
             withCredentials: true,
             headers: { Cookie: req.headers.cookie }
@@ -43,16 +43,17 @@ class RolPermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al crear múltiples relaciones rol-permiso:", err.message);
+        console.error("Error al obtener relaciones paginadas:", err.message);
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
 
-    // Obtener todas las relaciones rol-permiso
-    this.router.get("/", verifyToken, checkPermisosDesdeRoles(["ver_roles", "ver_permisos"]), async (req, res) => {
+    // Obtener permisos no asignados a un rol
+    this.router.get("/rol-no-asignado/:rolId", verifyToken, checkPermisosDesdeRoles(["ver_roles", "ver_permisos"]), async (req, res) => {
+      const { rolId } = req.params;
       try {
         const response = await axios.get(
-          `${USUARIO_SERVICE}/auth-service/rol-permiso/`,
+          `${USUARIO_SERVICE}/auth-service/rol-permiso/rol-no-asignado/${rolId}`,
           {
             withCredentials: true,
             headers: { Cookie: req.headers.cookie }
@@ -60,7 +61,7 @@ class RolPermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener relaciones rol-permiso:", err.message);
+        console.error("Error al obtener permisos no asignados:", err.message);
         res.status(500).send({ message: "Error al comunicarse con auth-service" });
       }
     });
