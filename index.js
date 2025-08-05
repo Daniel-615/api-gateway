@@ -10,6 +10,7 @@ const rolPermisoService=require('./src/routes/rol.permiso.route.js')
 const permisoService=require('./src/routes/permiso.route.js')
 const wishlistService=require('./src/routes/wishlist.route.js')
 const cartService=require('./src/routes/cart.route.js')
+const productoService=require('./src/routes/producto.route.js')
 class Server {
   constructor() {
     this.app = express();
@@ -37,6 +38,7 @@ class Server {
     new UsuarioRolService(this.app);
     new wishlistService(this.app);
     new cartService(this.app);
+    new productoService(this.app);
   }
 
   start() {
