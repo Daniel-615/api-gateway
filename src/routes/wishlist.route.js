@@ -20,16 +20,19 @@ class WishListRoutes {
       async (req, res) => {
         try {
           const response = await axios.post(
-            `${WISHLIST_SERVICE}/producto-service/wishlist`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist`,
             req.body,
             {
               withCredentials: true,
-              headers: { Cookie: req.headers.cookie }
+              headers: {
+                Cookie: req.headers.cookie || "",
+                "Content-Type": "application/json"
+              }
             }
           );
           res.status(response.status).send(response.data);
         } catch (err) {
-          this.handleError(err, res);
+          this.handleError(err, res, "agregar producto a la wishlist");
         }
       }
     );
@@ -42,15 +45,17 @@ class WishListRoutes {
       async (req, res) => {
         try {
           const response = await axios.get(
-            `${WISHLIST_SERVICE}/producto-service/wishlist/${req.params.user_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/${req.params.user_id}`,
             {
               withCredentials: true,
-              headers: { Cookie: req.headers.cookie }
+              headers: {
+                Cookie: req.headers.cookie || ""
+              }
             }
           );
           res.status(response.status).send(response.data);
         } catch (err) {
-          this.handleError(err, res);
+          this.handleError(err, res, "obtener la wishlist");
         }
       }
     );
@@ -63,15 +68,17 @@ class WishListRoutes {
       async (req, res) => {
         try {
           const response = await axios.delete(
-            `${WISHLIST_SERVICE}/producto-service/wishlist/${req.params.user_id}/${req.params.product_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/${req.params.user_id}/${req.params.product_id}`,
             {
               withCredentials: true,
-              headers: { Cookie: req.headers.cookie }
+              headers: {
+                Cookie: req.headers.cookie || ""
+              }
             }
           );
           res.status(response.status).send(response.data);
         } catch (err) {
-          this.handleError(err, res);
+          this.handleError(err, res, "eliminar producto de la wishlist");
         }
       }
     );
@@ -84,29 +91,39 @@ class WishListRoutes {
       async (req, res) => {
         try {
           const response = await axios.delete(
-            `${WISHLIST_SERVICE}/producto-service/wishlist/clear/${req.params.user_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/clear/${req.params.user_id}`,
             {
               withCredentials: true,
-              headers: { Cookie: req.headers.cookie }
+              headers: {
+                Cookie: req.headers.cookie || ""
+              }
             }
           );
           res.status(response.status).send(response.data);
         } catch (err) {
-          this.handleError(err, res);
+          this.handleError(err, res, "vaciar la wishlist");
         }
       }
     );
   }
 
-  handleError(err, res) {
+  handleError(err, res, contexto = "procesar la solicitud") {
     if (err.response) {
-      const errorMessage =
-        err.response.data?.message || "Error desconocido al procesar la solicitud.";
-      return res
-        .status(err.response.status)
-        .send({ success: false, error: errorMessage });
+      const status = err.response.status || 500;
+      const message =
+        err.response.data?.message ||
+        `Error desconocido al ${contexto}.`;
+
+      return res.status(status).send({
+        success: false,
+        error: message
+      });
     }
-    res.status(500).send({ message: "Error al comunicarse con wishlist-service" });
+
+    res.status(500).send({
+      success: false,
+      error: `Error interno al ${contexto}.`
+    });
   }
 }
 

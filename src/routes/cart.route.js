@@ -20,7 +20,7 @@ class CartRoutes {
       async (req, res) => {
         try {
           const response = await axios.post(
-            `${WISHLIST_SERVICE}/producto-service/cart`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/cart`,
             req.body,
             {
               withCredentials: true,
@@ -42,7 +42,7 @@ class CartRoutes {
       async (req, res) => {
         try {
           const response = await axios.get(
-            `${WISHLIST_SERVICE}/producto-service/cart/${req.params.user_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/cart/${req.params.user_id}`,
             {
               withCredentials: true,
               headers: { Cookie: req.headers.cookie },
@@ -63,7 +63,7 @@ class CartRoutes {
       async (req, res) => {
         try {
           const response = await axios.put(
-            `${WISHLIST_SERVICE}/producto-service/cart/${req.params.user_id}/${req.params.product_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/cart/${req.params.user_id}/${req.params.product_id}`,
             req.body,
             {
               withCredentials: true,
@@ -85,7 +85,7 @@ class CartRoutes {
       async (req, res) => {
         try {
           const response = await axios.delete(
-            `${WISHLIST_SERVICE}/producto-service/cart/${req.params.user_id}/${req.params.product_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/cart/${req.params.user_id}/${req.params.product_id}`,
             {
               withCredentials: true,
               headers: { Cookie: req.headers.cookie },
@@ -106,7 +106,7 @@ class CartRoutes {
       async (req, res) => {
         try {
           const response = await axios.delete(
-            `${WISHLIST_SERVICE}/producto-service/cart/clear/${req.params.user_id}`,
+            `${WISHLIST_SERVICE}/cart-wishlist-service/cart/clear/${req.params.user_id}`,
             {
               withCredentials: true,
               headers: { Cookie: req.headers.cookie },
