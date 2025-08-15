@@ -30,7 +30,7 @@ class WishListRoutes {
               }
             }
           );
-          res.status(response.status).send(response.data);
+          return res.status(response.status).send(response.data);
         } catch (err) {
           this.handleError(err, res, "agregar producto a la wishlist");
         }
@@ -53,13 +53,34 @@ class WishListRoutes {
               }
             }
           );
-          res.status(response.status).send(response.data);
+          
+          return res.status(response.status).send(response.data);
         } catch (err) {
           this.handleError(err, res, "obtener la wishlist");
         }
       }
     );
-
+    this.router.delete(
+      "/clear/:user_id",
+      verifyToken,
+      checkPermisosDesdeRoles(["vaciar_wishlist"]),
+      async (req, res) => {
+        try {
+          const response = await axios.delete(
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/clear/${req.params.user_id}`,
+            {
+              withCredentials: true,
+              headers: {
+                Cookie: req.headers.cookie || ""
+              }
+            }
+          );
+          return res.status(response.status).send(response.data);
+        } catch (err) {
+          this.handleError(err, res, "vaciar la wishlist");
+        }
+      }
+    );
     // Eliminar un producto de la wishlist
     this.router.delete(
       "/:user_id/:product_id",
@@ -76,35 +97,13 @@ class WishListRoutes {
               }
             }
           );
-          res.status(response.status).send(response.data);
+          return res.status(response.status).send(response.data);
         } catch (err) {
           this.handleError(err, res, "eliminar producto de la wishlist");
         }
       }
     );
 
-    // Vaciar wishlist completa del usuario
-    this.router.delete(
-      "/clear/:user_id",
-      verifyToken,
-      checkPermisosDesdeRoles(["vaciar_wishlist"]),
-      async (req, res) => {
-        try {
-          const response = await axios.delete(
-            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/clear/${req.params.user_id}`,
-            {
-              withCredentials: true,
-              headers: {
-                Cookie: req.headers.cookie || ""
-              }
-            }
-          );
-          res.status(response.status).send(response.data);
-        } catch (err) {
-          this.handleError(err, res, "vaciar la wishlist");
-        }
-      }
-    );
   }
 
   handleError(err, res, contexto = "procesar la solicitud") {
