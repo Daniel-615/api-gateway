@@ -41,7 +41,6 @@ class ProductoRoutes {
                 );
                 res.status(response.status).send(response.data);
             } catch (err) {
-                console.log(err.response.data)
                 res.status(500).send({ message: "Error al comunicarse con producto-service" });
             }
         });
