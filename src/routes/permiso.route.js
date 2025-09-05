@@ -25,8 +25,7 @@ class PermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al crear permiso:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -47,8 +46,7 @@ class PermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener permisos:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -64,8 +62,7 @@ class PermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener permiso:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -82,8 +79,7 @@ class PermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al actualizar permiso:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -99,10 +95,19 @@ class PermisoRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al eliminar permiso:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
+  }
+  handleError(err, res) {
+    if (err.response) {
+      const errorMessage =
+        err.response.data?.message || "Error desconocido al procesar la solicitud.";
+      return res
+        .status(err.response.status)
+        .send({ success: false, error: errorMessage });
+    }
+    res.status(500).send({ message: "Error al comunicarse con permiso-service" });
   }
 }
 

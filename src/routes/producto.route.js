@@ -25,7 +25,7 @@ class ProductoRoutes {
                 );
                 res.status(response.status).send(response.data);
             } catch (err) {
-                res.status(500).send({ message: "Error al comunicarse con producto-service" });
+                this.handleError(err,res);
             }
         });
 
@@ -41,7 +41,7 @@ class ProductoRoutes {
                 );
                 res.status(response.status).send(response.data);
             } catch (err) {
-                res.status(500).send({ message: "Error al comunicarse con producto-service" });
+                this.handleError(err,res);
             }
         });
 
@@ -57,7 +57,7 @@ class ProductoRoutes {
                 );
                 res.status(response.status).send(response.data);
             } catch (err) {
-                res.status(500).send({ message: "Error al comunicarse con producto-service" });
+                this.handleError(err,res);
             }
         });
 
@@ -74,7 +74,7 @@ class ProductoRoutes {
                 );
                 res.status(response.status).send(response.data);
             } catch (err) {
-                res.status(500).send({ message: "Error al comunicarse con producto-service" });
+                this.handleError(err,res);
             }
         });
 
@@ -90,9 +90,19 @@ class ProductoRoutes {
                 );
                 res.status(response.status).send(response.data);
             } catch (err) {
-                res.status(500).send({ message: "Error al comunicarse con producto-service" });
+                this.handleError(err, res);
             }
         });
+    }
+    handleError(err, res) {
+        if (err.response) {
+        const errorMessage =
+            err.response.data?.message || "Error desconocido al procesar la solicitud.";
+        return res
+            .status(err.response.status)
+            .send({ success: false, error: errorMessage });
+        }
+        res.status(500).send({ message: "Error al comunicarse con producto-service" });
     }
 }
 

@@ -21,8 +21,7 @@ class CategoriaRoutes {
         });
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al crear categoría:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con producto-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -35,8 +34,7 @@ class CategoriaRoutes {
         });
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener categorías:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con producto-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -49,8 +47,7 @@ class CategoriaRoutes {
         });
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener categoría:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con producto-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -63,8 +60,7 @@ class CategoriaRoutes {
         });
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al actualizar categoría:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con producto-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -77,10 +73,19 @@ class CategoriaRoutes {
         });
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al eliminar categoría:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con producto-service" });
+        this.handleError(err,res);
       }
     });
+  }
+  handleError(err, res) {
+    if (err.response) {
+      const errorMessage =
+        err.response.data?.message || "Error desconocido al procesar la solicitud.";
+      return res
+        .status(err.response.status)
+        .send({ success: false, error: errorMessage });
+    }
+    res.status(500).send({ message: "Error al comunicarse con categoria-service" });
   }
 }
 

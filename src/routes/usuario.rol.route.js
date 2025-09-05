@@ -25,8 +25,7 @@ class UsuarioRolRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al crear relación usuario-rol:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -42,8 +41,7 @@ class UsuarioRolRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener relaciones usuario-rol:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -60,8 +58,7 @@ class UsuarioRolRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al obtener relación usuario-rol específica:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
 
@@ -78,10 +75,19 @@ class UsuarioRolRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.error("Error al eliminar relación usuario-rol:", err.message);
-        res.status(500).send({ message: "Error al comunicarse con auth-service" });
+        this.handleError(err,res);
       }
     });
+  }
+  handleError(err, res) {
+    if (err.response) {
+      const errorMessage =
+        err.response.data?.message || "Error desconocido al procesar la solicitud.";
+      return res
+        .status(err.response.status)
+        .send({ success: false, error: errorMessage });
+    }
+    res.status(500).send({ message: "Error al comunicarse con auth-service" });
   }
 }
 
