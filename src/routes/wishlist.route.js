@@ -12,6 +12,68 @@ class WishListRoutes {
   }
 
   registerRoutes() {
+    this.router.post(
+      "/share/:userId",
+      verifyToken,
+      checkPermisosDesdeRoles(["agregar_wishlist"]),
+      async (req, res) => {
+        try {
+          const response = await axios.post(
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/share/${req.params.userId}`,
+            // body: { expiresInHours, forceRefresh }
+            req.body,
+            {
+              withCredentials: true,
+              headers: {
+                Cookie: req.headers.cookie || "",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          return res.status(response.status).send(response.data);
+        } catch (err) {
+          this.handleError(err, res, "generar/renovar el enlace público de la wishlist");
+        }
+      }
+    );
+
+  // PRIVADA
+    this.router.delete(
+      "/share/:userId",
+      verifyToken,
+      checkPermisosDesdeRoles(["agregar_wishlist"]),
+      async (req, res) => {
+        try {
+          const response = await axios.delete(
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/share/${req.params.userId}`,
+            {
+              withCredentials: true,
+              headers: {
+                Cookie: req.headers.cookie || "",
+              },
+            }
+          );
+          return res.status(response.status).send(response.data);
+        } catch (err) {
+          this.handleError(err, res, "revocar el enlace público de la wishlist");
+        }
+      }
+    );
+
+  // URL PÚBLICA
+    this.router.get(
+      "/shared/:shareId",
+      async (req, res) => {
+        try {
+          const response = await axios.get(
+            `${WISHLIST_SERVICE}/cart-wishlist-service/wishlist/shared/${req.params.shareId}`
+          );
+          return res.status(response.status).send(response.data);
+        } catch (err) {
+          this.handleError(err, res, "obtener la wishlist pública");
+        }
+      }
+    );
     // Agregar producto a la wishlist
     this.router.post(
       "/",
@@ -103,9 +165,7 @@ class WishListRoutes {
         }
       }
     );
-
   }
-
   handleError(err, res, contexto = "procesar la solicitud") {
     if (err.response) {
       const status = err.response.status || 500;
