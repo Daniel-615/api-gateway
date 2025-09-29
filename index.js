@@ -16,6 +16,12 @@ const colorService=require('./src/routes/color.route.js')
 const tallaService=require('./src/routes/talla.route.js')
 const productoColorService=require('./src/routes/producto.color.route.js')
 const productoTallaService=require('./src/routes/producto.talla.route.js')
+const stripeService=require('./src/routes/stripe.route.js');
+const envioProducto=require('./src/routes/envio.producto.route.js');
+const envio=require('./src/routes/envio.route.js');
+const estadoEnvio=require('./src/routes/estado.envio.route.js');
+const tarifaEnvio=require('./src/routes/tarifa.envio.route.js');
+
 
 class Server {
   constructor() {
@@ -50,6 +56,11 @@ class Server {
     new tallaService(this.app);
     new productoColorService(this.app);
     new productoTallaService(this.app);
+    new stripeService(this.app);
+    new envioProducto(this.app);
+    new envio(this.app);
+    new estadoEnvio(this.app);
+    new tarifaEnvio(this.app);
   }
 
   start() {

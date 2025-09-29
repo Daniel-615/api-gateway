@@ -70,8 +70,10 @@ class CartRoutes {
               headers: { Cookie: req.headers.cookie },
             }
           );
+
           res.status(response.status).send(response.data);
         } catch (err) {
+          console.log(err.message)
           this.handleError(err, res);
         }
       }
