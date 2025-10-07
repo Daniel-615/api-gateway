@@ -64,19 +64,6 @@ class EnvioRoutes {
         this.handleError(err, res);
       }
     });
-
-    // Eliminar un envío por id_envio
-    this.router.delete("/:id_envio", verifyToken, async (req, res) => {
-      try {
-        const response = await axios.delete(
-          `${ENVIOS_SERVICE}/envio-service/envio/${req.params.id_envio}`,
-          { withCredentials: true, headers: { Cookie: req.headers.cookie } }
-        );
-        res.status(response.status).send(response.data);
-      } catch (err) {
-        this.handleError(err, res);
-      }
-    });
   }
 
   handleError(err, res) {

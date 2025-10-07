@@ -11,20 +11,8 @@ class EstadoEnvioRoutes {
   }
 
   registerRoutes() {
-    // Crear un nuevo estado de envío
-    this.router.post("/", verifyToken, async (req, res) => {
-      try {
-        const response = await axios.post(
-          `${ENVIOS_SERVICE}/envio-service/estado_envio`,
-          req.body,
-          { withCredentials: true, headers: { Cookie: req.headers.cookie } }
-        );
-        res.status(response.status).send(response.data);
-      } catch (err) {
-        this.handleError(err, res);
-      }
-    });
-
+    // Aca habia un create
+    
     // Obtener todos los estados de envío
     this.router.get("/", verifyToken, async (req, res) => {
       try {
