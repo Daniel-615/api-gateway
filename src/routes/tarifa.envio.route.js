@@ -24,6 +24,26 @@ class TarifaEnvioRoutes {
         this.handleError(err, res);
       }
     });
+    this.router.post("/calcular", verifyToken, async (req, res) => {
+      try {
+        const response = await axios.post(
+          `${ENVIOS_SERVICE}/envio-service/tarifa_envio/calcular`,
+          req.body,
+          {
+            withCredentials: true,
+            headers: {
+              Cookie: req.headers.cookie || "",
+              Authorization: req.headers.authorization || "", 
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        res.status(response.status).send(response.data);
+      } catch (err) {
+        this.handleError(err, res);
+      }
+    });
+
 
     // Obtener todas las tarifas de envío
     this.router.get("/", verifyToken, async (req, res) => {
