@@ -36,7 +36,10 @@ class Server {
   configureMiddlewares() {
     this.app.use(cors({
       origin: FRONTEND_URL,
-      credentials: true // Permitir cookies y credenciales
+      credentials: true,
+      methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      exposedHeaders: ["Set-Cookie"]
     }));
     this.app.use(express.urlencoded({ extended: true }));
   }
