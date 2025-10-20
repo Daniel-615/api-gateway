@@ -132,7 +132,7 @@ class UsuarioRoutes {
         );
         res.status(response.status).send(response.data);
       } catch (err) {
-        console.log(err.message);
+        console.log(err);
         if(err.response){
           const errorMessage = err.response.data?.message || "Error desconocido al procesar la solicitud.";
           return res.status(err.response.status).send({ success: false, error: errorMessage });
