@@ -43,10 +43,15 @@ class UsuarioRoutes {
           req.body,
           { withCredentials: true }
         );
+        const setCookieHeaders = response.headers['set-cookie'];
+        if (setCookieHeaders) {
+          setCookieHeaders.forEach(cookie => {
+            res.append('Set-Cookie', cookie);
+          });
+        }
         res.status(response.status).send(response.data);
       } catch (err) {
         console.error("Error al registrar usuario:", err.message);
-        
         if (err.response) {
           const errorMessage = err.response.data?.message || "Error desconocido al registrar usuario.";
           return res.status(err.response.status).send({ success: false, error: errorMessage });
@@ -54,7 +59,6 @@ class UsuarioRoutes {
         return res.status(500).send({ success: false, error: "Error de conexión con auth-service." });
       }
     });
-
 
     // REGISTRO DE ADMIN
     this.router.post("/register-admin", verifyToken, checkPermisosDesdeRoles(["asignar_roles"]), async (req, res) => {
