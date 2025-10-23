@@ -290,7 +290,35 @@ class UsuarioRoutes {
       const redirectURL = `${USUARIO_SERVICE}/auth-service/usuario/auth/google`;
       res.redirect(redirectURL);
     });
+  this.router.get("/auth/google/callback", async (req, res) => {
+    try {
+      const qs = req.originalUrl.split("?")[1] || "";
+      const url = `${USUARIO_SERVICE}/auth-service/usuario/auth/google/callback${qs ? "?" + qs : ""}`;
 
+      const response = await axios.get(url, {
+        withCredentials: true,
+        headers: { Cookie: req.headers.cookie || "" },
+        maxRedirects: 0,
+        validateStatus: (status) => status >= 200 && status < 400,
+      });
+
+      const setCookie = response.headers["set-cookie"];
+      if (setCookie) {
+        setCookie.forEach((c) => res.append("Set-Cookie", c));
+      }
+
+      const location = response.headers["location"];
+      if (location) {
+        return res.redirect(location);
+      }
+
+      return res.status(response.status).send(response.data);
+    } catch (err) {
+      const status = err.response?.status || 500;
+      const msg = err.response?.data?.message || "Error en callback de Google.";
+      return res.status(status).send({ success: false, error: msg });
+    }
+  });
 
     // VERIFICACIÓN DE TOKEN
     this.router.get("/", async (req, res) => {
