@@ -21,7 +21,8 @@ const envioProducto=require('./src/routes/envio.producto.route.js');
 const envio=require('./src/routes/envio.route.js');
 const estadoEnvio=require('./src/routes/estado.envio.route.js');
 const tarifaEnvio=require('./src/routes/tarifa.envio.route.js');
-
+const Deseo=require("./src/routes/deseo.route.js")
+const Promocion=require("./src/routes/promocion.route.js")
 
 class Server {
   constructor() {
@@ -64,6 +65,8 @@ class Server {
     new envio(this.app);
     new estadoEnvio(this.app);
     new tarifaEnvio(this.app);
+    new Deseo(this.app);
+    new Promocion(this.app)
   }
 
   start() {
