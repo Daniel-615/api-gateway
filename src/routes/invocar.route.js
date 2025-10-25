@@ -10,6 +10,24 @@ class InvocarRoutes{
         app.use("/api-gateway/invocar",this.router);
     }
     registerRoutes(){
+        this.router.patch('/:usuarioId',
+            verifyToken,
+            checkPermisosDesdeRoles(["modificar_estado_invocacion"]),
+            async(req,res)=>{
+                try{
+                    const response=await axios.patch(
+                        `${PRODUCTO_SERVICE}/producto-service/invocar/${req.params.usuarioId}`,
+                        req.body,
+                        {
+                            withCredentials:true,
+                        }
+                    );
+                    return res.status(response.status).send(response.data);
+                }catch(err){
+                    this.handleError(err,res,"modificar estado de invocación del producto-service");
+                }
+            }
+        )
         this.router.get(
             "/:usuario_id",
             verifyToken,
