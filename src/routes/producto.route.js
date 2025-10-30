@@ -32,10 +32,17 @@ class ProductoRoutes {
         // Obtener todos los productos
         this.router.get("/", verifyToken, checkPermisosDesdeRoles(["ver_productos"]), async (req, res) => {
             try {
+                const { page = 1, limit = 10, categoria } = req.query;
+
                 const response = await axios.get(
                     `${PRODUCTO_SERVICE}/producto-service/producto`,
                     {
                         withCredentials: true,
+                         params: {
+                            page: Number(page),
+                            limit: Number(limit),
+                            ...(categoria ? { categoria } : {}),
+                        },
                         headers: { Cookie: req.headers.cookie }
                     }
                 );
